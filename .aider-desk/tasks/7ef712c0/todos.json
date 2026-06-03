@@ -1,0 +1,9 @@
+{
+  "initialUserPrompt": "Erstelle oder ersetze die .gitignore mit exaktem Inhalt für Vite+Three.js+Vitest Projekt",
+  "items": [
+    {
+      "name": ".gitignore mit exaktem Inhalt erstellen/ersetzen",
+      "completed": true
+    }
+  ]
+}
