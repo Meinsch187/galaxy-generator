@@ -28,8 +28,9 @@ export function createGalaxyRenderer(container, positions, colors) {
   scene.background = new THREE.Color('#0b0b1a')
 
   // Camera
+  const BASE_CAMERA = new THREE.Vector3(0, -8, 16)
   const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 200)
-  camera.position.set(0, -8, 16)
+  camera.position.copy(BASE_CAMERA)
   camera.lookAt(0, 0, 0)
 
   // Renderer
@@ -68,13 +69,34 @@ export function createGalaxyRenderer(container, positions, colors) {
   }
   window.addEventListener('resize', onResize)
 
+  const mouse = { x: 0, y: 0 }
+
+  function onMouseMove(e) {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
+  }
+  window.addEventListener('mousemove', onMouseMove)
+
+  let zoomLevel = 1.0
+
+  const target = { x: 0, y: 0 }
+
+  function onWheel(e) {
+    zoomLevel -= e.deltaY * 0.001
+    zoomLevel = Math.max(0.3, Math.min(3.0, zoomLevel))
+  }
+  window.addEventListener('wheel', onWheel)
+
   // Animation loop
   let animationId
 
   function animate() {
     animationId = requestAnimationFrame(animate)
-    points.rotation.y += 0.0003
-    points.rotation.x += 0.00005
+    target.x += (mouse.x - target.x) * 0.02
+    target.y += (mouse.y - target.y) * 0.02
+    points.rotation.y += 0.0003 + target.x * 0.12
+    points.rotation.x += 0.00005 + target.y * 0.06
+    camera.position.copy(BASE_CAMERA).multiplyScalar(zoomLevel)
     renderer.render(scene, camera)
   }
   animate()
@@ -88,6 +110,8 @@ export function createGalaxyRenderer(container, positions, colors) {
       renderer.domElement.remove()
       renderer.dispose()
       window.removeEventListener('resize', onResize)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('wheel', onWheel)
     }
   }
 }
