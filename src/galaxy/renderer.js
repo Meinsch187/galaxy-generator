@@ -102,6 +102,8 @@ export function createGalaxyRenderer(container, positions, colors) {
   animate()
 
   function updateGeometry(newPositions, newColors) {
+    geometry.deleteAttribute('position')
+    geometry.deleteAttribute('color')
     geometry.setAttribute('position', new THREE.BufferAttribute(newPositions, 3))
     geometry.setAttribute('color', new THREE.BufferAttribute(newColors, 3))
   }

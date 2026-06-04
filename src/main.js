@@ -36,19 +36,23 @@ function regenerate() {
 // GUI
 const gui = new GUI({ title: 'Galaxie' })
 
-gui.add(params, 'particleCount', 100, 30000, 100).name('Partikel')
-gui.add(params, 'radius', 5, 30, 0.5).name('Radius')
-gui.add(params, 'arms', 1, 10, 1).name('Arme')
-gui.add(params, 'spin', -3, 3, 0.1).name('Drehung')
-gui.add(params, 'spread', 0, 1, 0.01).name('Streuung')
-gui.add(params, 'heightSpread', 0, 2, 0.01).name('Höhe')
-gui.add(params, 'concentration', 0.5, 10, 0.1).name('Dichte')
-gui.addColor(params, 'innerColor').name('Farbe innen')
-gui.addColor(params, 'outerColor').name('Farbe außen')
-gui.add(params, 'seed').name('Seed')
+gui.add(params, 'particleCount', 100, 30000, 100).name('Partikel').onFinishChange(regenerate)
+gui.add(params, 'radius', 5, 30, 0.5).name('Radius').onFinishChange(regenerate)
+gui.add(params, 'arms', 1, 10, 1).name('Arme').onChange(regenerate)
+gui.add(params, 'spin', -3, 3, 0.1).name('Drehung').onChange(regenerate)
+gui.add(params, 'spread', 0, 1, 0.01).name('Streuung').onChange(regenerate)
+gui.add(params, 'heightSpread', 0, 2, 0.01).name('Höhe').onChange(regenerate)
+gui.add(params, 'concentration', 0.5, 10, 0.1).name('Dichte').onChange(regenerate)
+gui.addColor(params, 'innerColor').name('Farbe innen').onChange(regenerate)
+gui.addColor(params, 'outerColor').name('Farbe außen').onChange(regenerate)
+const seedController = gui.add(params, 'seed').name('Seed').disable()
 
-// On any change, regenerate
-gui.controllers.forEach(c => c.onChange(regenerate))
+const randomButton = { randomize() {
+  params.seed = Math.floor(Math.random() * 100000)
+  seedController.updateDisplay()
+  regenerate()
+}}
+gui.add(randomButton, 'randomize').name('Zufall')
 
 // Initial generation
 regenerate()

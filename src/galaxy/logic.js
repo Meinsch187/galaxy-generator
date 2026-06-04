@@ -28,7 +28,7 @@ export function generateGalaxy(options = {}) {
     }
   }
 
-  const rng = createRNG(seed)
+  const rng = createRNG(seed ?? Date.now())
 
   const positions = new Float32Array(particleCount * 3)
   const colors = new Float32Array(particleCount * 3)
