@@ -94,9 +94,12 @@ export function createGalaxyRenderer(container, positions, colors) {
     animationId = requestAnimationFrame(animate)
     target.x += (mouse.x - target.x) * 0.02
     target.y += (mouse.y - target.y) * 0.02
-    points.rotation.y += 0.0003 + target.x * 0.12
-    points.rotation.x += 0.00005 + target.y * 0.06
+    points.rotation.y += 0.0003
+    points.rotation.x += 0.00005
     camera.position.copy(BASE_CAMERA).multiplyScalar(zoomLevel)
+    camera.position.x += target.x * 2.5
+    camera.position.y += target.y * 1.5
+    camera.lookAt(0, 0, 0)
     renderer.render(scene, camera)
   }
   animate()
