@@ -101,6 +101,11 @@ export function createGalaxyRenderer(container, positions, colors) {
   }
   animate()
 
+  function updateGeometry(newPositions, newColors) {
+    geometry.setAttribute('position', new THREE.BufferAttribute(newPositions, 3))
+    geometry.setAttribute('color', new THREE.BufferAttribute(newColors, 3))
+  }
+
   return {
     dispose() {
       cancelAnimationFrame(animationId)
@@ -112,6 +117,7 @@ export function createGalaxyRenderer(container, positions, colors) {
       window.removeEventListener('resize', onResize)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('wheel', onWheel)
-    }
+    },
+    updateGeometry
   }
 }
